@@ -1,0 +1,38 @@
+{
+  "config" : {
+    "channelId" : 728781398911221795,
+    "enabled" : true,
+    "token" : "ODIxOTEwMDAzODk1MjM4NjY3.YFKlVw.ahuCiIyZN1hjNS0gwK988Xu1uEs",
+    "prefix" : "c!"
+  },
+  "currentRun" : {
+    "number" : 4,
+    "lastCounter" : 692512270353170468,
+    "counters" : [ 692512270353170468 ]
+  },
+  "pastRuns" : [ {
+    "number" : 1,
+    "lastCounter" : 692512270353170468,
+    "counters" : [ 692512270353170468 ]
+  }, {
+    "number" : 1,
+    "lastCounter" : 692512270353170468,
+    "counters" : [ 692512270353170468 ]
+  }, {
+    "number" : 1,
+    "lastCounter" : 692512270353170468,
+    "counters" : [ 692512270353170468 ]
+  }, {
+    "number" : 5,
+    "lastCounter" : 692512270353170468,
+    "counters" : [ 692512270353170468 ]
+  }, {
+    "number" : 3,
+    "lastCounter" : 692512270353170468,
+    "counters" : [ 692512270353170468 ]
+  }, {
+    "number" : 9,
+    "lastCounter" : 692512270353170468,
+    "counters" : [ 692512270353170468 ]
+  } ]
+}

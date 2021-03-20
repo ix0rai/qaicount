@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+mainClassName = "io.qaiah.qaicount.Main"
+group 'io.qaiah'
+version '0.1.0'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    //json parsing library
+    //https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.2")
+    //integration with discord
+    //https://bintray.com/dv8fromtheworld/maven/JDA
+    implementation ("net.dv8tion:JDA:4.2.0_242") {
+        exclude module: "opus-java"
+    }
+}
+
+//language level is java 11
+compileJava {
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+    options.encoding = 'UTF-8'
+}
+
+//append the version to a properties file so we can access it from java code
+task('addVersion') {
+    doLast {
+        file("src/main/resources/qaicount.properties").write(
+                "# qaicount's version. this is stored here to allow project-wide version syncing\n" +
+                        "version=$version"
+        )
+    }
+}
+
+tasks.build.dependsOn(tasks.addVersion)
+tasks.shadowJar.dependsOn(tasks.addVersion)
+tasks.run.dependsOn(tasks.addVersion)
