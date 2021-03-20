@@ -39,12 +39,12 @@ public class CountingData {
                 currentRun.increase(userId, message);
             } else {
                 if (input == currentRun.getNumber() + 1) {
-//                    if (userId != currentRun.getLastCounter()) {
+                    if (userId != currentRun.getLastCounter()) {
                         currentRun.increase(userId, message);
-//                    } else {
-//                        finishRun();
-//                        event.getChannel().sendMessage(Listener.errorEmbed("user cannot count twice in a row; reset count")).queue();
-//                    }
+                    } else {
+                        finishRun();
+                        event.getChannel().sendMessage(Listener.errorEmbed("user cannot count twice in a row; reset count")).queue();
+                    }
                 } else {
                     finishRun();
                     event.getChannel().sendMessage(Listener.errorEmbed("wrong number; reset count to 0")).queue();
