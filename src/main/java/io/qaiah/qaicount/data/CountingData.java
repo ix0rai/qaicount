@@ -62,7 +62,7 @@ public class CountingData {
 
     @JsonIgnore
     public String getPastRunsAsString() {
-        StringBuilder runs = new StringBuilder("runs: " + "\ncurrent run: \n" + currentRun);
+        StringBuilder runs = new StringBuilder("runs: \n" + "\ncurrent run: \n" + currentRun);
         for (int i = pastRuns.size() - 1; i > 0; i--) {
             runs.append("\n\nrun ").append(i).append(":\n").append(pastRuns.get(i));
         }
