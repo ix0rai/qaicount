@@ -1,7 +1,7 @@
 package io.qaiah.qaicount;
 
 import io.qaiah.qaicount.data.Config;
-import io.qaiah.qaicount.data.CountingData;
+import io.qaiah.qaicount.data.Counter;
 import io.qaiah.qaicount.data.JsonHelper;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -13,32 +13,32 @@ public class Main {
 
     private static JDA api;
 
-    private static final CountingData DATA = JsonHelper.read();
+    private static final Counter COUNTER = JsonHelper.read();
 
     public static void main(String[] args) {
 
         try {
-            api = JDABuilder.createDefault(DATA.getConfig().getToken()).build();
+            api = JDABuilder.createDefault(COUNTER.getConfig().getToken()).build();
             api.addEventListener(new Listener());
         } catch (LoginException e) {
             e.printStackTrace();
         }
     }
 
-    public static CountingData getData() {
-        return DATA;
+    public static Counter getCounter() {
+        return COUNTER;
     }
 
     public static Config getConfig() {
-        return DATA.config;
+        return COUNTER.getConfig();
     }
 
     public static void enable() {
-        DATA.config.enable();
+        COUNTER.getConfig().enable();
     }
 
     public static void disable() {
-        DATA.config.disable();
+        COUNTER.getConfig().disable();
     }
 
     public static MessageChannel getConfiguredChannel() {

@@ -10,24 +10,24 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CountingData {
-    public Config config;
-    public CountRun currentRun;
+public class Counter {
+    private Config config;
+    private CountRun currentRun;
     private final List<CountRun> pastRuns;
 
     @JsonCreator
-    public CountingData() {
+    public Counter() {
         pastRuns = new ArrayList<>();
     }
 
-    public CountingData(Config config, int number) {
+    public Counter(Config config, int number) {
         this.config = config;
         this.currentRun = new CountRun(number);
         pastRuns = new ArrayList<>();
     }
 
-    public static CountingData createDefault() {
-        return new CountingData(new Config(), 0);
+    public static Counter createDefault() {
+        return new Counter(new Config(), 0);
     }
 
     public void handle(int input, MessageReceivedEvent event) {
@@ -61,9 +61,12 @@ public class CountingData {
     }
 
     @JsonIgnore
-    public String getPastRunsAsString() {
+    public String getPastRunsAsString(int limit) {
         StringBuilder runs = new StringBuilder("runs: \n" + "\ncurrent run: \n" + currentRun);
+        limit ++;
         for (int i = pastRuns.size() - 1; i > 0; i--) {
+            limit--;
+            if (limit == 0) break;
             runs.append("\n\nrun ").append(i).append(":\n").append(pastRuns.get(i));
         }
 

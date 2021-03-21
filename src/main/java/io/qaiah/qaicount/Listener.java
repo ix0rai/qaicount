@@ -14,7 +14,7 @@ public class Listener extends ListenerAdapter {
         final MessageChannel channel = event.getChannel();
         //if we have a number
         if (isNumber(content) && channel.equals(Main.getConfiguredChannel())) {
-            Main.getData().handle(Integer.parseInt(content), event);
+            Main.getCounter().handle(Integer.parseInt(content), event);
         //otherwise we handle other commands
         } else if (content.startsWith(Main.getConfig().getPrefix())) {
             final String[] splitContent = content.split(Main.getConfig().getPrefix())[1].split(" ");
@@ -43,10 +43,23 @@ public class Listener extends ListenerAdapter {
                     }
                     break;
                 case "info":
-                    channel.sendMessage(successEmbed(Main.getData().getCurrentRun().toString())).queue();
+                    channel.sendMessage(successEmbed(Main.getCounter().getCurrentRun().toString())).queue();
                     break;
                 case "runs":
-                    channel.sendMessage(successEmbed(Main.getData().getPastRunsAsString())).queue();
+                case "history":
+                    if (splitContent.length > 1) {
+                        if (splitContent[1].equals("all")) {
+                            channel.sendMessage(successEmbed(Main.getCounter().getPastRunsAsString(Integer.MAX_VALUE))).queue();
+                        } else {
+                            try {
+                                channel.sendMessage(successEmbed(Main.getCounter().getPastRunsAsString(Integer.parseInt(splitContent[1])))).queue();
+                            } catch (NumberFormatException e) {
+                                channel.sendMessage(errorEmbed("could not parse argument \"number of runs to retrieve (`args[1]`)\" to integer (`NumberFormatException`)")).queue();
+                            }
+                        }
+                    } else {
+                        channel.sendMessage(successEmbed(Main.getCounter().getPastRunsAsString(5))).queue();
+                    }
                     break;
             }
         }

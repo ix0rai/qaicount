@@ -3,7 +3,6 @@ package io.qaiah.qaicount.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.qaiah.qaicount.Main;
-import io.qaiah.qaicount.data.CountingData;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class JsonHelper {
         if (!file.exists()) {
             try {
                 if (file.createNewFile()) {
-                    mapper.writeValue(file, CountingData.createDefault());
+                    mapper.writeValue(file, Counter.createDefault());
                 }
 
                 return true;
@@ -30,20 +29,20 @@ public class JsonHelper {
         }
     }
 
-    public static CountingData read() {
+    public static Counter read() {
         //if the file doesn't exist create it and return the default data set
         if (writeIfNonExistent()) {
-            return CountingData.createDefault();
+            return Counter.createDefault();
         } else {
-            CountingData data = null;
+            Counter data = null;
             try {
-                data = mapper.readValue(file, CountingData.class);
+                data = mapper.readValue(file, Counter.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             if (data == null) {
-                data = CountingData.createDefault();
+                data = Counter.createDefault();
             }
 
             return data;
@@ -52,10 +51,10 @@ public class JsonHelper {
 
     public static void save() {
         try {
-            if (Main.getData() == null) {
+            if (Main.getCounter() == null) {
                 return;
             }
-            mapper.writeValue(new File("data.json"), Main.getData());
+            mapper.writeValue(new File("data.json"), Main.getCounter());
         } catch (IOException e) {
             e.printStackTrace();
         }

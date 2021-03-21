@@ -41,7 +41,6 @@ public class CountRun {
         if (!counters.contains(lastCounter)) {
             counters.add(lastCounter);
         }
-        JsonHelper.save();
     }
 
     @Override
@@ -59,8 +58,8 @@ public class CountRun {
         }
 
         return "last number counted: " + number
-                + "\nlast counter: <@" + lastCounter + ">"
-                + "\nparticipants: " + participants;
+                + "\nlast counter: " + (lastCounter == 0? "no counters yet" : "<@" + lastCounter + ">")
+                + "\nparticipants: " + (participants.toString().equals("") ? "no participants yet" : participants.toString());
     }
 
     @JsonGetter
