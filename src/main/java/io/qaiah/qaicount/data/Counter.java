@@ -11,23 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Counter {
-    private Config config;
+    private final Config config;
     private CountRun currentRun;
     private final List<CountRun> pastRuns;
 
     @JsonCreator
     public Counter() {
+        config = new Config();
+        currentRun = new CountRun();
         pastRuns = new ArrayList<>();
-    }
-
-    public Counter(Config config, int number) {
-        this.config = config;
-        this.currentRun = new CountRun(number);
-        pastRuns = new ArrayList<>();
-    }
-
-    public static Counter createDefault() {
-        return new Counter(new Config(), 0);
     }
 
     public void handle(int input, MessageReceivedEvent event) {

@@ -19,28 +19,23 @@ public class CountRun {
         counters = new ArrayList<>();
     }
 
-    public CountRun(int number) {
-        this.number = number;
-        lastCounter = 0L;
-        counters = new ArrayList<>();
-    }
-
     public void increase(final long id, final Message msg) {
         number ++;
 
-        if (lastCounter != 0L && !counters.contains(lastCounter)) {
-            counters.add(lastCounter);
-        }
-
+        addCounter(id);
         lastCounter = id;
         msg.addReaction("\u2705").queue();
         JsonHelper.save();
     }
 
-    public void end() {
-        if (!counters.contains(lastCounter)) {
-            counters.add(lastCounter);
+    private void addCounter(long id) {
+        if (id != 0 && !counters.contains(id)) {
+            counters.add(id);
         }
+    }
+
+    public void end() {
+        addCounter(lastCounter);
     }
 
     @Override

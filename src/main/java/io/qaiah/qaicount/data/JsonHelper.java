@@ -16,7 +16,7 @@ public class JsonHelper {
         if (!file.exists()) {
             try {
                 if (file.createNewFile()) {
-                    mapper.writeValue(file, Counter.createDefault());
+                    mapper.writeValue(file, new JsonObject());
                 }
 
                 return true;
@@ -29,32 +29,35 @@ public class JsonHelper {
         }
     }
 
-    public static Counter read() {
+    public static JsonObject read() {
         //if the file doesn't exist create it and return the default data set
         if (writeIfNonExistent()) {
-            return Counter.createDefault();
+            return new JsonObject();
         } else {
-            Counter data = null;
+            JsonObject data = null;
             try {
-                data = mapper.readValue(file, Counter.class);
+                data = mapper.readValue(file, JsonObject.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             if (data == null) {
-                data = Counter.createDefault();
+                data = new JsonObject();
             }
 
             return data;
         }
     }
 
+    /**
+     * save the data currently stored in {@link Main#getCounters()}
+     */
     public static void save() {
         try {
-            if (Main.getCounter() == null) {
+            if (Main.getJsonData() == null) {
                 return;
             }
-            mapper.writeValue(new File("data.json"), Main.getCounter());
+            mapper.writeValue(file, Main.getJsonData());
         } catch (IOException e) {
             e.printStackTrace();
         }

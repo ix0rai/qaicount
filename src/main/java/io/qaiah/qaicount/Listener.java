@@ -1,5 +1,6 @@
 package io.qaiah.qaicount;
 
+import io.qaiah.qaicount.data.JsonHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -10,55 +11,56 @@ import org.jetbrains.annotations.NotNull;
 public class Listener extends ListenerAdapter {
 
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-        final String content = event.getMessage().getContentRaw();
+        final String contentRaw = event.getMessage().getContentRaw();
         final MessageChannel channel = event.getChannel();
+        final long id = event.getGuild().getIdLong();
         //if we have a number
-        if (isNumber(content) && channel.equals(Main.getConfiguredChannel())) {
-            Main.getCounter().handle(Integer.parseInt(content), event);
+        if (isNumber(contentRaw) && channel.equals(Main.getConfiguredChannel(id))) {
+            Main.getCounter(id).handle(Integer.parseInt(contentRaw), event);
         //otherwise we handle other commands
-        } else if (content.startsWith(Main.getConfig().getPrefix())) {
-            final String[] splitContent = content.split(Main.getConfig().getPrefix())[1].split(" ");
-            switch (splitContent[0]) {
+        } else if (contentRaw.startsWith(Main.getPrefix())) {
+            final String[] content = contentRaw.split(Main.getPrefix())[1].split(" ");
+            switch (content[0]) {
                 case "cfg":
                 case "config":
-                    switch (splitContent[1]) {
+                    switch (content[1]) {
                         case "channel":
                             try {
-                                System.out.println("h");
-                                long id = Long.parseLong(splitContent[2]);
-                                Main.getConfig().setChannelId(id);
-                                channel.sendMessage(successEmbed("set counting channel to <#" + id + ">")).queue();
+                                long channelId = Long.parseLong(content[2]);
+                                Main.getConfig(id).setChannelId(channelId);
+                                JsonHelper.save();
+                                channel.sendMessage(successEmbed("set counting channel to <#" + channelId + ">")).queue();
                             } catch (NumberFormatException e) {
                                 channel.sendMessage(errorEmbed("failed to set channel: id provided is invalid (`NumberFormatException`)")).queue();
                             }
                             break;
                         case "enable":
-                            Main.enable();
+                            Main.enable(id);
                             channel.sendMessage(successEmbed("enabled counting")).queue();
                             break;
                         case "disable":
-                            Main.disable();
+                            Main.disable(id);
                             channel.sendMessage(successEmbed("disabled counting")).queue();
                             break;
                     }
                     break;
                 case "info":
-                    channel.sendMessage(successEmbed(Main.getCounter().getCurrentRun().toString())).queue();
+                    channel.sendMessage(successEmbed(Main.getCounter(id).getCurrentRun().toString())).queue();
                     break;
                 case "runs":
                 case "history":
-                    if (splitContent.length > 1) {
-                        if (splitContent[1].equals("all")) {
-                            channel.sendMessage(successEmbed(Main.getCounter().getPastRunsAsString(Integer.MAX_VALUE))).queue();
+                    if (content.length > 1) {
+                        if (content[1].equals("all")) {
+                            channel.sendMessage(successEmbed(Main.getCounter(id).getPastRunsAsString(Integer.MAX_VALUE))).queue();
                         } else {
                             try {
-                                channel.sendMessage(successEmbed(Main.getCounter().getPastRunsAsString(Integer.parseInt(splitContent[1])))).queue();
+                                channel.sendMessage(successEmbed(Main.getCounter(id).getPastRunsAsString(Integer.parseInt(content[1])))).queue();
                             } catch (NumberFormatException e) {
                                 channel.sendMessage(errorEmbed("could not parse argument \"number of runs to retrieve (`args[1]`)\" to integer (`NumberFormatException`)")).queue();
                             }
                         }
                     } else {
-                        channel.sendMessage(successEmbed(Main.getCounter().getPastRunsAsString(5))).queue();
+                        channel.sendMessage(successEmbed(Main.getCounter(id).getPastRunsAsString(5))).queue();
                     }
                     break;
             }
