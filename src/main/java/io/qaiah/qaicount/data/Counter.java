@@ -22,20 +22,24 @@ public class Counter {
         pastRuns = new ArrayList<>();
     }
 
-    public void handle(int input, MessageReceivedEvent event) {
+    public void handle(final int input, final MessageReceivedEvent event) {
         if (config.isEnabled()) {
             final long userId = event.getAuthor().getIdLong();
             final Message message = event.getMessage();
 
+            //for the first number we can ignore other criteria as long as the input is correct
             if (currentRun.getNumber() == 0 && input == 1) {
                 currentRun.increase(userId, message);
             } else {
+                //criteria:
+                //1. input is the number after the last one
+                //2. a different user is counting this number than the user who counted last
                 if (input == currentRun.getNumber() + 1) {
                     if (userId != currentRun.getLastCounter()) {
                         currentRun.increase(userId, message);
                     } else {
                         finishRun();
-                        event.getChannel().sendMessage(Listener.errorEmbed("user cannot count twice in a row; reset count")).queue();
+                        event.getChannel().sendMessage(Listener.errorEmbed("user cannot count twice in a row; reset count to 0")).queue();
                     }
                 } else {
                     finishRun();
@@ -45,7 +49,7 @@ public class Counter {
         }
     }
 
-    public void finishRun() {
+    private void finishRun() {
         pastRuns.add(currentRun);
         currentRun.end();
         currentRun = new CountRun();

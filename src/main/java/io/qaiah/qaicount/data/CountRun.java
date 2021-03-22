@@ -28,7 +28,7 @@ public class CountRun {
         JsonHelper.save();
     }
 
-    private void addCounter(long id) {
+    private void addCounter(final long id) {
         if (id != 0 && !counters.contains(id)) {
             counters.add(id);
         }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonObject {
+public class JsonData {
     @JsonProperty("token")
     private final String token;
     @JsonProperty("prefix")
@@ -16,7 +16,7 @@ public class JsonObject {
     private final Map<Long, Counter> counters;
 
     @JsonCreator
-    public JsonObject() {
+    public JsonData() {
         this.prefix = "c!";
         token = "";
         counters = new HashMap<>();

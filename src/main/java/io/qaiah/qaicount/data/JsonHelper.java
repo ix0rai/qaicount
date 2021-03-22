@@ -12,37 +12,38 @@ public class JsonHelper {
 
     private static final File file = new File("data.json");
 
+    /**
+     * write empty json data to a file if it doesn't exist
+     * @return whether or not the file was successfully written to
+     */
     private static boolean writeIfNonExistent() {
-        if (!file.exists()) {
-            try {
-                if (file.createNewFile()) {
-                    mapper.writeValue(file, new JsonObject());
-                }
-
+        try {
+            if (!file.exists() && file.createNewFile()) {
+                mapper.writeValue(file, new JsonData());
                 return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return true;
+            } else {
+                return false;
             }
-        } else {
+        } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
 
-    public static JsonObject read() {
+    public static JsonData read() {
         //if the file doesn't exist create it and return the default data set
         if (writeIfNonExistent()) {
-            return new JsonObject();
+            return new JsonData();
         } else {
-            JsonObject data = null;
+            JsonData data;
             try {
-                data = mapper.readValue(file, JsonObject.class);
+                data = mapper.readValue(file, JsonData.class);
+                if (data == null) {
+                    data = new JsonData();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-
-            if (data == null) {
-                data = new JsonObject();
+                return new JsonData();
             }
 
             return data;

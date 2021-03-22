@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = "io.qaiah.qaicount.Main"
 group 'io.qaiah'
-version '0.2.0'
+version '0.2.1'
 
 repositories {
     mavenCentral()
@@ -33,12 +33,10 @@ compileJava {
 
 //append the version to a properties file so we can access it from java code
 task('addVersion') {
-    doLast {
-        file("src/main/resources/qaicount.properties").write(
-                "# qaicount's version. this is stored here to allow project-wide version syncing\n" +
-                        "version=$version"
-        )
-    }
+    file("src/main/resources/qaicount.properties").write(
+            "# qaicount's version. this is stored here to allow project-wide version syncing\n" +
+                    "version=$version"
+    )
 }
 
 tasks.build.dependsOn(tasks.addVersion)

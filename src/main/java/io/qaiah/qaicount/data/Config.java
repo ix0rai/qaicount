@@ -30,7 +30,7 @@ public class Config {
     }
 
     @JsonSetter
-    public void setChannelId(long id) {
+    public void setChannelId(final long id) {
         this.channelId = id;
     }
 

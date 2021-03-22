@@ -3,7 +3,7 @@ package io.qaiah.qaicount;
 import io.qaiah.qaicount.data.Config;
 import io.qaiah.qaicount.data.Counter;
 import io.qaiah.qaicount.data.JsonHelper;
-import io.qaiah.qaicount.data.JsonObject;
+import io.qaiah.qaicount.data.JsonData;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -15,10 +15,9 @@ public class Main {
 
     private static JDA api;
 
-    private static final JsonObject JSON_DATA = JsonHelper.read();
+    private static final JsonData JSON_DATA = JsonHelper.read();
 
-    public static void main(String[] args) {
-
+    public static void main(final String[] args) {
         try {
             api = JDABuilder.createDefault(JSON_DATA.getToken()).build();
             api.addEventListener(new Listener());
@@ -31,7 +30,7 @@ public class Main {
         return JSON_DATA.getCounters();
     }
 
-    public static Counter getCounter(long id) {
+    public static Counter getCounter(final long id) {
         if (!getCounters().containsKey(id)) {
             getCounters().put(id, new Counter());
         }
@@ -39,7 +38,7 @@ public class Main {
         return getCounters().get(id);
     }
 
-    public static Config getConfig(long id) {
+    public static Config getConfig(final long id) {
         return getCounter(id).getConfig();
     }
 
@@ -47,11 +46,11 @@ public class Main {
         return JSON_DATA.getPrefix();
     }
 
-    public static void enable(long id) {
+    public static void enable(final long id) {
         getConfig(id).enable();
     }
 
-    public static void disable(long id) {
+    public static void disable(final long id) {
         getConfig(id).disable();
     }
 
@@ -59,7 +58,7 @@ public class Main {
         return api.getTextChannelById(getConfig(id).getChannelId());
     }
 
-    public static JsonObject getJsonData() {
+    public static JsonData getJsonData() {
         return JSON_DATA;
     }
 }
