@@ -26,7 +26,10 @@ public class Listener extends ListenerAdapter {
                     switch (content[1]) {
                         case "channel":
                             try {
-                                long channelId = Long.parseLong(content[2]);
+                                long channelId = channel.getIdLong();
+                                if (content.length > 2 && isNumber(content[2])) {
+                                    channelId = Long.parseLong(content[2]);
+                                }
                                 Main.getConfig(id).setChannelId(channelId);
                                 JsonHelper.save();
                                 channel.sendMessage(successEmbed("set counting channel to <#" + channelId + ">")).queue();
@@ -47,6 +50,24 @@ public class Listener extends ListenerAdapter {
                 case "info":
                     channel.sendMessage(successEmbed(Main.getCounter(id).getCurrentRun().toString())).queue();
                     break;
+                case "help":
+                    channel.sendMessage(new EmbedBuilder()
+                            .setColor(0x00FF00)
+                            .setAuthor("qaicount")
+                            .setTitle("help")
+                            .addField("`cfg [subcommand]`",
+                                    "commands:\n" +
+                                    "`channel [channel id or leave empty to use current channel]`: set the counting channel\n" +
+                                    "`enable`: turn on counting for this guild\n" +
+                                    "`disable`: turn off counting for this guild", false)
+                            .addField("`info`", "info about the currently going count", false)
+                            .addField("`help`", "display this message", false)
+                            .addField("`runs [amount to retrieve or \"all\" to get all (defaults to 5)]`", "show past runs", false)
+                            .addField("`best`", "info about the best run so far", false)
+                            .setFooter("made by ioxom")
+                            .build()
+                    ).queue();
+                    break;
                 case "runs":
                 case "history":
                     if (content.length > 1) {
@@ -62,6 +83,9 @@ public class Listener extends ListenerAdapter {
                     } else {
                         channel.sendMessage(successEmbed(Main.getCounter(id).getPastRunsAsString(5))).queue();
                     }
+                    break;
+                case "best":
+                    channel.sendMessage(successEmbed(Main.getCounter(id).getBestRun().toString())).queue();
                     break;
             }
         }

@@ -54,7 +54,10 @@ public class Counter {
 
     @JsonIgnore
     public String getPastRunsAsString(int limit) {
-        StringBuilder runs = new StringBuilder("runs: \n" + "\ncurrent run: \n" + currentRun);
+        final CountRun bestRun = getBestRun();
+        final boolean currentRunBest = bestRun.equals(currentRun);
+        final StringBuilder runs = new StringBuilder("runs: \n\n" + (currentRunBest ? "current run (also best run): \n" + currentRun : "current run: \n" + currentRun + "\n\nbest run: \n" + bestRun));
+
         limit ++;
         for (int i = pastRuns.size() - 1; i > 0; i--) {
             limit--;
@@ -63,6 +66,18 @@ public class Counter {
         }
 
         return runs.toString();
+    }
+
+    @JsonIgnore
+    public CountRun getBestRun() {
+        CountRun bestRun = currentRun;
+        for (CountRun run : pastRuns) {
+            if (bestRun.getNumber() < run.getNumber()) {
+                bestRun = run;
+            }
+        }
+
+        return bestRun;
     }
 
     @JsonGetter
