@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
 import javax.security.auth.login.LoginException;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -28,6 +29,14 @@ public class Main {
 
     public static Map<Long, Counter> getCounters() {
         return JSON_DATA.getCounters();
+    }
+
+    public static List<Long> getAdmins() {
+        return JSON_DATA.getAdmins();
+    }
+
+    public static boolean isAdmin(long id) {
+        return getAdmins().contains(id);
     }
 
     public static Counter getCounter(final long id) {

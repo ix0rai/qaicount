@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JsonData {
@@ -12,13 +14,16 @@ public class JsonData {
     private final String token;
     @JsonProperty("prefix")
     private final String prefix;
+    @JsonProperty("admins")
+    private final List<Long> admins;
     @JsonProperty("guilds")
     private final Map<Long, Counter> counters;
 
     @JsonCreator
     public JsonData() {
-        this.prefix = "c!";
+        prefix = "c!";
         token = "";
+        admins = new ArrayList<>();
         counters = new HashMap<>();
     }
 
@@ -30,6 +35,11 @@ public class JsonData {
     @JsonGetter
     public String getPrefix() {
         return prefix;
+    }
+
+    @JsonGetter
+    public List<Long> getAdmins() {
+        return admins;
     }
 
     @JsonGetter

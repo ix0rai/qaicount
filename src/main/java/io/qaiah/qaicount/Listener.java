@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Listener extends ListenerAdapter {
 
+    @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
         final String contentRaw = event.getMessage().getContentRaw();
         final MessageChannel channel = event.getChannel();
@@ -23,11 +24,16 @@ public class Listener extends ListenerAdapter {
             switch (content[0]) {
                 case "cfg":
                 case "config":
+                    //user must be present in our admin list
+                    if (!Main.isAdmin(event.getAuthor().getIdLong())) {
+                        return;
+                    }
+
                     switch (content[1]) {
                         case "channel":
                             try {
                                 long channelId = channel.getIdLong();
-                                if (content.length > 2 && isNumber(content[2])) {
+                                if (content.length >= 3 && isNumber(content[2])) {
                                     channelId = Long.parseLong(content[2]);
                                 }
                                 Main.getConfig(id).setChannelId(channelId);
@@ -44,6 +50,30 @@ public class Listener extends ListenerAdapter {
                         case "disable":
                             Main.disable(id);
                             channel.sendMessage(successEmbed("disabled counting")).queue();
+                            break;
+                        case "admin":
+                        case "admins":
+                            if (content.length >= 4) {
+                                if (content[2].equals("add")) {
+                                    try {
+                                        Main.getAdmins().add(Long.parseLong(content[3]));
+                                        channel.sendMessage(successEmbed("added admin: <@" + content[3] + ">")).queue();
+                                    } catch (NumberFormatException e) {
+                                        channel.sendMessage(errorEmbed(content[3] + " is not a user id (`NumberFormatException`)")).queue();
+                                    }
+                                } else if (content[2].equals("remove")) {
+                                    try {
+                                        Main.getAdmins().remove(Long.parseLong(content[3]));
+                                        channel.sendMessage(successEmbed("removed admin: <@" + content[3] + ">")).queue();
+                                    } catch (NumberFormatException e) {
+                                        channel.sendMessage(errorEmbed(content[3] + " is not a user id (`NumberFormatException`)")).queue();
+                                    }
+                                } else {
+                                    channel.sendMessage(errorEmbed("unrecognised argument")).queue();
+                                }
+                            } else {
+                                channel.sendMessage(errorEmbed("not enough arguments")).queue();
+                            }
                             break;
                     }
                     break;
