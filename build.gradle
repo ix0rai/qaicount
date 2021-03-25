@@ -5,8 +5,8 @@ plugins {
 }
 
 mainClassName = "io.qaiah.qaicount.Main"
-group 'io.qaiah'
-version '0.2.1'
+group = 'io.qaiah'
+version = '0.2.1'
 
 repositories {
     mavenCentral()
@@ -37,6 +37,10 @@ task('addVersion') {
             "# qaicount's version. this is stored here to allow project-wide version syncing\n" +
                     "version=$version"
     )
+}
+
+shadowJar {
+    archiveFileName = project.name + "-" + archiveVersion.get() + ".jar"
 }
 
 tasks.build.dependsOn(tasks.addVersion)
