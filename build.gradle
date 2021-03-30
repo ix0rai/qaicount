@@ -5,8 +5,8 @@ plugins {
 }
 
 mainClassName = "io.qaiah.qaicount.Main"
-group = 'io.qaiah'
-version = '0.2.1'
+group 'io.qaiah'
+version '0.2.1'
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.12.2")
     //integration with discord
     //https://bintray.com/dv8fromtheworld/maven/JDA
-    implementation ("net.dv8tion:JDA:4.2.0_248") {
+    implementation ("net.dv8tion:JDA:4.2.0_DEV") {
         exclude module: "opus-java"
     }
 }
@@ -40,10 +40,6 @@ task('addVersion') {
             "# qaicount's version. this is stored here to allow project-wide version syncing\n" +
                     "version=$version"
     )
-}
-
-shadowJar {
-    archiveFileName = project.name + "-" + archiveVersion.get() + ".jar"
 }
 
 tasks.build.dependsOn(tasks.addVersion)
