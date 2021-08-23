@@ -22,7 +22,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.12.4")
     //integration with discord
     //https://bintray.com/dv8fromtheworld/maven/JDA
-    implementation ("net.dv8tion:JDA:4.3.0_300") {
+    implementation ("net.dv8tion:JDA:4.3.0_310") {
         exclude module: "opus-java"
     }
 }
