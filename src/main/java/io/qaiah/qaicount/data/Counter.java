@@ -39,11 +39,11 @@ public class Counter {
                         currentRun.increase(userId, message);
                     } else {
                         finishRun();
-                        event.getChannel().sendMessage(Listener.errorEmbed("user cannot count twice in a row; reset count to 0")).queue();
+                        event.getChannel().sendMessageEmbeds(Listener.errorEmbed("user cannot count twice in a row; reset count to 0")).queue();
                     }
                 } else {
                     finishRun();
-                    event.getChannel().sendMessage(Listener.errorEmbed("wrong number; reset count to 0")).queue();
+                    event.getChannel().sendMessageEmbeds(Listener.errorEmbed("wrong number; reset count to 0")).queue();
                 }
             }
         }

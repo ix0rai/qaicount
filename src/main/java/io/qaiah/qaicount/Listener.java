@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class Listener extends ListenerAdapter {
+    public static final String CREATOR = "ix0rai";
+    public static final String ID = "qaicount";
 
     @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
@@ -38,18 +40,18 @@ public class Listener extends ListenerAdapter {
                                 }
                                 Main.getConfig(id).setChannelId(channelId);
                                 JsonHelper.save();
-                                channel.sendMessage(successEmbed("set counting channel to <#" + channelId + ">")).queue();
+                                channel.sendMessageEmbeds(successEmbed("set counting channel to <#" + channelId + ">")).queue();
                             } catch (NumberFormatException e) {
-                                channel.sendMessage(errorEmbed("failed to set channel: id provided is invalid (`NumberFormatException`)")).queue();
+                                channel.sendMessageEmbeds(errorEmbed("failed to set channel: id provided is invalid (`NumberFormatException`)")).queue();
                             }
                             break;
                         case "enable":
                             Main.enable(id);
-                            channel.sendMessage(successEmbed("enabled counting")).queue();
+                            channel.sendMessageEmbeds(successEmbed("enabled counting")).queue();
                             break;
                         case "disable":
                             Main.disable(id);
-                            channel.sendMessage(successEmbed("disabled counting")).queue();
+                            channel.sendMessageEmbeds(successEmbed("disabled counting")).queue();
                             break;
                         case "admin":
                         case "admins":
@@ -57,33 +59,33 @@ public class Listener extends ListenerAdapter {
                                 if (content[2].equals("add")) {
                                     try {
                                         Main.getAdmins().add(Long.parseLong(content[3]));
-                                        channel.sendMessage(successEmbed("added admin: <@" + content[3] + ">")).queue();
+                                        channel.sendMessageEmbeds(successEmbed("added admin: <@" + content[3] + ">")).queue();
                                     } catch (NumberFormatException e) {
-                                        channel.sendMessage(errorEmbed(content[3] + " is not a user id (`NumberFormatException`)")).queue();
+                                        channel.sendMessageEmbeds(errorEmbed(content[3] + " is not a user id (`NumberFormatException`)")).queue();
                                     }
                                 } else if (content[2].equals("remove")) {
                                     try {
                                         Main.getAdmins().remove(Long.parseLong(content[3]));
-                                        channel.sendMessage(successEmbed("removed admin: <@" + content[3] + ">")).queue();
+                                        channel.sendMessageEmbeds(successEmbed("removed admin: <@" + content[3] + ">")).queue();
                                     } catch (NumberFormatException e) {
-                                        channel.sendMessage(errorEmbed(content[3] + " is not a user id (`NumberFormatException`)")).queue();
+                                        channel.sendMessageEmbeds(errorEmbed(content[3] + " is not a user id (`NumberFormatException`)")).queue();
                                     }
                                 } else {
-                                    channel.sendMessage(errorEmbed("unrecognised argument")).queue();
+                                    channel.sendMessageEmbeds(errorEmbed("unrecognised argument")).queue();
                                 }
                             } else {
-                                channel.sendMessage(errorEmbed("not enough arguments")).queue();
+                                channel.sendMessageEmbeds(errorEmbed("not enough arguments")).queue();
                             }
                             break;
                     }
                     break;
                 case "info":
-                    channel.sendMessage(successEmbed(Main.getCounter(id).getCurrentRun().toString())).queue();
+                    channel.sendMessageEmbeds(successEmbed(Main.getCounter(id).getCurrentRun().toString())).queue();
                     break;
                 case "help":
-                    channel.sendMessage(new EmbedBuilder()
+                    channel.sendMessageEmbeds(new EmbedBuilder()
                             .setColor(0x00FF00)
-                            .setAuthor("qaicount")
+                            .setAuthor(ID)
                             .setTitle("help")
                             .addField("`cfg [subcommand]`",
                                     "commands:\n" +
@@ -94,7 +96,7 @@ public class Listener extends ListenerAdapter {
                             .addField("`help`", "display this message", false)
                             .addField("`runs [amount to retrieve or \"all\" to get all (defaults to 5)]`", "show past runs", false)
                             .addField("`best`", "info about the best run so far", false)
-                            .setFooter("made by ioxom")
+                            .setFooter("made by " + CREATOR)
                             .build()
                     ).queue();
                     break;
@@ -102,20 +104,20 @@ public class Listener extends ListenerAdapter {
                 case "history":
                     if (content.length > 1) {
                         if (content[1].equals("all")) {
-                            channel.sendMessage(successEmbed(Main.getCounter(id).getPastRunsAsString(Integer.MAX_VALUE))).queue();
+                            channel.sendMessageEmbeds(successEmbed(Main.getCounter(id).getPastRunsAsString(Integer.MAX_VALUE))).queue();
                         } else {
                             try {
-                                channel.sendMessage(successEmbed(Main.getCounter(id).getPastRunsAsString(Integer.parseInt(content[1])))).queue();
+                                channel.sendMessageEmbeds(successEmbed(Main.getCounter(id).getPastRunsAsString(Integer.parseInt(content[1])))).queue();
                             } catch (NumberFormatException e) {
-                                channel.sendMessage(errorEmbed("could not parse argument \"number of runs to retrieve (`args[1]`)\" to integer (`NumberFormatException`)")).queue();
+                                channel.sendMessageEmbeds(errorEmbed("could not parse argument \"number of runs to retrieve (`args[1]`)\" to integer (`NumberFormatException`)")).queue();
                             }
                         }
                     } else {
-                        channel.sendMessage(successEmbed(Main.getCounter(id).getPastRunsAsString(5))).queue();
+                        channel.sendMessageEmbeds(successEmbed(Main.getCounter(id).getPastRunsAsString(5))).queue();
                     }
                     break;
                 case "best":
-                    channel.sendMessage(successEmbed(Main.getCounter(id).getBestRun().toString())).queue();
+                    channel.sendMessageEmbeds(successEmbed(Main.getCounter(id).getBestRun().toString())).queue();
                     break;
             }
         }
@@ -132,7 +134,7 @@ public class Listener extends ListenerAdapter {
 
     public static MessageEmbed successEmbed(String description) {
         return new EmbedBuilder()
-                .setAuthor("qaicount")
+                .setAuthor(ID)
                 .setColor(0x00FF00)
                 .setDescription(description)
                 .setFooter("made by ioxom")
@@ -141,7 +143,7 @@ public class Listener extends ListenerAdapter {
 
     public static MessageEmbed errorEmbed(String description) {
         return new EmbedBuilder()
-                .setAuthor("qaicount")
+                .setAuthor(ID)
                 .setColor(0xB40D0D)
                 .setDescription(description)
                 .setFooter("made by ioxom")
